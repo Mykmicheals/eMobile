@@ -1,0 +1,16 @@
+{
+  "resourceName": "s3userauthstoragecountryflags2",
+  "bucketName": "userauth-storage-country-flags-2",
+  "policyUUID": "b089147f",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ",
+    "CREATE_AND_UPDATE",
+    "DELETE"
+  ],
+  "authAccess": [
+    "READ",
+    "CREATE_AND_UPDATE",
+    "DELETE"
+  ]
+}

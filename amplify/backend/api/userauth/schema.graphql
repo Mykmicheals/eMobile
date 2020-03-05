@@ -1,0 +1,78 @@
+type SwapTicket @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  UserID: ID!
+  CurrencyPair: String!
+  NegotiateRate: Boolean!
+  Rate: Float!
+  AmountToSend: Float!
+  orderticketID: ID! @index(name: "byOrderTicket")
+}
+
+type OrderBook @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  UserID: ID!
+  Currency: String!
+  AmountO: Float
+  CurrencyPair: String
+  Rate: Float!
+  StartDate: AWSDate!
+  EndDate: AWSDate
+}
+
+type OrderTicket @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  UserID: ID!
+  CurrencySend: String!
+  CurrencyReceive: String!
+  SwapTickets: [SwapTicket] @hasMany(indexName: "byOrderTicket", fields: ["id"])
+}
+
+type PaymentProvider @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Name: String
+  AddressID: ID
+  CountryID: ID
+  DateCreated: AWSDate
+}
+
+type UserAccount @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  UserID: ID
+  PaymentProviderID: ID
+  AccountNumberID: ID
+  Type: String
+  DateCreated: AWSDate
+  DateDeactivated: AWSDate
+  Active: Boolean
+}
+
+type Useraccess @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  user_id: ID
+  login: String
+  failed_attempts: String
+  password_changed_dt: AWSDate
+  role: String
+  require_password_change: String
+  password: String
+  login_status: String
+  user_status: String
+  expiry_dt: AWSDate
+  password_hint: String
+  logical_delete: String
+  dt_update_last: AWSDate
+  received_contract: String
+  event_flg: String
+}
+
+type UserData @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Username: String
+  Email: String
+  Phone: AWSPhone
+  DateOfBirth: AWSDate
+  Gender: String
+  Address: String
+  city: String
+}
+ 
