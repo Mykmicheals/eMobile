@@ -41,6 +41,8 @@ import config from './src/aws-exports'
 import { withAuthenticator } from 'aws-amplify-react-native'
 import OrderBook from "./screens/Swap";
 import LinkAccount from "./screens/LinkAccount";
+import { MonoProvider, useMonoConnect } from '@mono.co/connect-react-native';
+import LinkAccount2 from "./screens/LinkAccount2";
 
 Amplify.configure(config)
 const Drawer = createDrawerNavigator();
@@ -186,8 +188,22 @@ const App = () => {
     }, 2000);
   }, []);
 
+  const config = {
+    publicKey: "test_pk_txILHvD85YFmYmDWIynt",
+    onClose: () => alert('Widget closed'),
+    onSuccess: (data) => {
+      const code = data.getAuthCode()
+      console.log("Access code", code)
+    },
+    reference: "random_string", // optional
+    onEvent: (eventName, data) => { // optional
+      console.log(eventName)
+      console.log(data)
+    }
+  }
+
   return (
-    <>
+    <MonoProvider {...config}>
       <NavigationContainer>
         {hideSplashScreen ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -243,7 +259,7 @@ const App = () => {
 
             <Stack.Screen
               name="linkaccount"
-              component={LinkAccount}
+              component={LinkAccount2}
               options={{ headerShown: false }}
             />
 
@@ -252,7 +268,7 @@ const App = () => {
           <SplashScreen />
         )}
       </NavigationContainer>
-    </>
+    </MonoProvider>
   );
 };
 export default withAuthenticator(App);
