@@ -24,7 +24,7 @@ const Header2 = ({ style }) => {
     async function onload() {
       try {
         const user = await loadUser()
-        console.log(user.attributes);
+        // console.log(user.attributes);
         setUser(user.attributes)
       } catch (e) {
         alert(e)
