@@ -43,6 +43,7 @@ import OrderBook from "./screens/Swap";
 import LinkAccount from "./screens/LinkAccount";
 import { MonoProvider, useMonoConnect } from '@mono.co/connect-react-native';
 import LinkAccount2 from "./screens/LinkAccount2";
+import Deposit from "./screens/Deposit";
 
 Amplify.configure(config)
 const Drawer = createDrawerNavigator();
@@ -202,6 +203,13 @@ const App = () => {
     }
   }
 
+  const payConfig = {
+    scope: "payments",
+    data: {
+      payment_id: "txreq_HeqMWnpWVvzdpMXiB4I123456" // The `id` property returned from the Initiate Payments API response object.
+    }
+  }
+
   return (
     <MonoProvider {...config}>
       <NavigationContainer>
@@ -262,6 +270,16 @@ const App = () => {
               component={LinkAccount2}
               options={{ headerShown: false }}
             />
+            {/* <MonoProvider {...{ ...config, ...payConfig }}> */}
+
+              <Stack.Screen
+                name="deposit"
+                component={Deposit}
+                options={{ headerShown: false }}
+              />
+            
+            {/* </MonoProvider> */}
+            
 
           </Stack.Navigator>
         ) : (

@@ -48,7 +48,7 @@ const DrawerMenu = ({ state, navigation }) => {
                 source={require("../assets/ionmailoutline.png")}
               />
               <TouchableOpacity onPress={(navigate)=>{navigation.navigate('linkaccount')}}>
-                              <Text style={[styles.getHelp, styles.ml16]}>Link Account </Text>
+                    <Text style={[styles.getHelp, styles.ml16]}>Link Account </Text>
               </TouchableOpacity>
 
             </View>
@@ -58,8 +58,8 @@ const DrawerMenu = ({ state, navigation }) => {
                 resizeMode="cover"
                 source={require("../assets/calender.png")}
               />
-              <Text style={[styles.covidAdvisory, styles.ml16]}>
-                Create Account
+              <Text onPress={(navigate) => { navigation.navigate('deposit') }} style={[styles.covidAdvisory, styles.ml16]}>
+                Deposit
               </Text>
             </View>
             <View style={[styles.menuItem2, styles.mt28]}>
