@@ -47,10 +47,13 @@ const DrawerMenu = ({ state, navigation }) => {
                 resizeMode="cover"
                 source={require("../assets/ionmailoutline.png")}
               />
-              <TouchableOpacity onPress={(navigate)=>{navigation.navigate('linkaccount')}}>
-                              <Text style={[styles.getHelp, styles.ml16]}>Link Account </Text>
+              <TouchableOpacity
+                onPress={(navigate) => {
+                  navigation.navigate("linkaccount");
+                }}
+              >
+                <Text style={[styles.getHelp, styles.ml16]}>Link Account </Text>
               </TouchableOpacity>
-
             </View>
             <View style={[styles.menuItem1, styles.mt28]}>
               <Image
@@ -58,9 +61,14 @@ const DrawerMenu = ({ state, navigation }) => {
                 resizeMode="cover"
                 source={require("../assets/calender.png")}
               />
-              <Text style={[styles.covidAdvisory, styles.ml16]}>
-                Create Account
-              </Text>
+
+              <TouchableOpacity
+                onPress={(navigate) => {
+                  navigation.navigate("deposit");
+                }}
+              >
+                <Text style={[styles.covidAdvisory, styles.ml16]}>Deposit</Text>
+              </TouchableOpacity>
             </View>
             <View style={[styles.menuItem2, styles.mt28]}>
               <Image

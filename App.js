@@ -36,15 +36,16 @@ import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // AWS IMPORTS
-import { Amplify } from 'aws-amplify'
-import config from './src/aws-exports'
-import { withAuthenticator } from 'aws-amplify-react-native'
+import { Amplify } from "aws-amplify";
+import config from "./src/aws-exports";
+import { withAuthenticator } from "aws-amplify-react-native";
 import OrderBook from "./screens/Swap";
 import LinkAccount from "./screens/LinkAccount";
-import { MonoProvider, useMonoConnect } from '@mono.co/connect-react-native';
+import { MonoProvider, useMonoConnect } from "@mono.co/connect-react-native";
 import LinkAccount2 from "./screens/LinkAccount2";
+import Deposit from "./screens/Deposit";
 
-Amplify.configure(config)
+Amplify.configure(config);
 const Drawer = createDrawerNavigator();
 
 const Tab = createBottomTabNavigator();
@@ -103,7 +104,7 @@ function BottomTabsRoot({ navigation }) {
               // borderWidth: 2,
               width: "100%",
               display: "flex",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             {bottomTabItemsNormal.map((item, index) => {
@@ -167,7 +168,7 @@ function BottomTabsRoot({ navigation }) {
     </Tab.Navigator>
   );
 }
-``
+``;
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
 
@@ -190,17 +191,31 @@ const App = () => {
 
   const config = {
     publicKey: "test_pk_txILHvD85YFmYmDWIynt",
-    onClose: () => alert('Widget closed'),
+    onClose: () => alert("Widget closed"),
     onSuccess: (data) => {
-      const code = data.getAuthCode()
-      console.log("Access code", code)
+      const code = data.getAuthCode();
+      console.log("Access code", code);
     },
     reference: "random_string", // optional
-    onEvent: (eventName, data) => { // optional
-      console.log(eventName)
-      console.log(data)
-    }
-  }
+    onEvent: (eventName, data) => {
+      // optional
+      console.log(eventName);
+      console.log(data);
+    },
+  };
+
+  const payConfig = {
+    scope: "payments",
+    publicKey: "test_pk_txILHvD85YFmYmDWIynt",
+
+    amount: 10000,
+    onClose: () => alert("Widget closed"),
+    data: {
+      amount: 10000,
+      type: "onetime-debit",
+      account: "640f45c8382507604bfa96a1",
+    },
+  };
 
   return (
     <MonoProvider {...config}>
@@ -262,7 +277,21 @@ const App = () => {
               component={LinkAccount2}
               options={{ headerShown: false }}
             />
+            {/* <MonoProvider {...{ ...config, ...payConfig }}>
+              <Stack.Screen
+                name="deposit"
+                component={Deposit}
+                options={{ headerShown: false }}
+              />
+            </MonoProvider> */}
 
+            <Stack.Screen name="deposit">
+              {() => (
+                <MonoProvider {...{ ...payConfig }}>
+                  <Deposit />
+                </MonoProvider>
+              )}
+            </Stack.Screen>
           </Stack.Navigator>
         ) : (
           <SplashScreen />

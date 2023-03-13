@@ -13,9 +13,14 @@ import { Picker } from "@react-native-picker/picker";
 import { DataStore, Auth } from "aws-amplify";
 import { SwapTicket } from "../src/models";
 import { TextInput, Button, Checkbox } from "react-native-paper";
-import { MonoProvider, useMonoConnect } from "@mono.co/connect-react-native";
+import {
+  useMonoConnect,
+  MonoConnect,
+  MonoProvider,
+  MonoPay
+} from "@mono.co/connect-react-native";
 
-const LinkAccount2 = () => {
+const Deposit = () => {
   const currencyOptions = [
     { label: "🇳🇬    Nigerian NGN", value: "NGN" },
     { label: "🇺🇸    Dollar USD", value: "USD" },
@@ -27,30 +32,7 @@ const LinkAccount2 = () => {
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
 
-  const { init } = useMonoConnect();
-
-  const onCountryChange = (country) => {
-    setSelectedCountry(country);
-  };
-
   const [user, setUser] = useState(null);
-  useEffect(() => {
-    function loadUser() {
-      return Auth.currentAuthenticatedUser({ bypassCache: true });
-    }
-
-    async function onload() {
-      try {
-        const user = await loadUser();
-        setUser(user.attributes);
-      } catch (e) {
-        alert(e);
-      }
-    }
-
-    onload();
-  }, []);
-
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
@@ -68,170 +50,94 @@ const LinkAccount2 = () => {
       });
   }, []);
 
-  // console.log(user)
+  const [amount, setAmount] = useState();
 
-  const createWallet = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-    var body = new URLSearchParams();
-    body.append("userId", user.email);
-    body.append("pin", pin);
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: body.toString(),
-      redirect: "follow",
-    };
-
-    fetch("http://192.168.100.37:5000/v1/wallet", requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-
-    console.log(body);
-  };
-
-  console.log(user);
-
-  const handleSubmit = async () => {
-    createWallet();
-
-    if (selectedCountry === "" || sendValue === "") {
-      alert("Pls selcect all fields");
-    } else {
-      init();
-    }
-  };
+  const { init } = useMonoConnect();
 
   return (
-    <View style={styles.explore}>
-      <StatusBar barStyle="default" />
-      <ScrollView
-        style={styles.exploreMainView}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.exploreMainViewContent}
-      >
-        <View style={{ marginTop: 20 }}>
-          <Text
-            style={[
-              styles.trendingDestinations,
-              { color: "black", fontSize: 20 },
-            ]}
-          >
-            Link Account
-          </Text>
-        </View>
-        <View style={[styles.exploreContent, styles.mt20]}>
-          <View style={styles.trendingHeader}>
-            <Text style={styles.trendingDestinations}>Select Country</Text>
-          </View>
-          <View style={{ borderRadius: 12 }}>
-            <View style={styles.selectContainer}>
-              {/* <Picker
-                                selectedValue={sendValue}
-                                style={{ height: 15, width: 200 }}
-                                onValueChange={(itemValue) => setSendValue(itemValue)}
-                            >
-                                {currencyOptions.map((item, i) => {
-                                    return (
 
-                                        <Picker.Item key={i} label={item.label} value={item.value} />
-                                    )
-                                })}
-
-                            </Picker> */}
-
-              <Picker
-                style={{ height: 15, width: 200 }}
-                selectedValue={selectedCountry}
-                onValueChange={onCountryChange}
-              >
-                <Picker.Item label="Select Country" value="" />
-                {countries.map((country) => (
-                  <Picker.Item
-                    key={country.code}
-                    label={country.name}
-                    value={country.code}
-                    icon={() => (
-                      <Image
-                        source={{ uri: country.flag }}
-                        style={{ width: 30, height: 20 }}
-                      />
-                    )}
-                  />
-                ))}
-              </Picker>
-            </View>
-          </View>
-        </View>
-        <View style={[styles.exploreContent, styles.mt20]}>
-          <View style={styles.trendingHeader}>
-            <Text style={styles.trendingDestinations}>Select Currency</Text>
-          </View>
-
-          <View style={{ borderRadius: 12 }}>
-            <View style={styles.selectContainer}>
-              <Picker
-                selectedValue={sendValue}
-                style={{ height: 15, width: 200 }}
-                onValueChange={(itemValue) => setSendValue(itemValue)}
-              >
-                <Picker.Item label="select account type" value="" />
-
-                {currencyOptions.map((item, i) => {
-                  return (
-                    <Picker.Item
-                      key={i}
-                      label={item.label}
-                      value={item.value}
-                    />
-                  );
-                })}
-              </Picker>
-            </View>
-          </View>
-        </View>
-        <View style={[styles.trendingDestinations1, styles.mt30]}>
-          <ScrollView
-            style={[styles.trendingCardsView, styles.mt14]}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.trendingCardsViewContent}
-          >
-            <TextInput
-              label="Enter Your pin"
-              keyboardType="decimal-pad"
-              style={{ backgroundColor: "white" }}
-              onChangeText={setPin}
-              secureTextEntry={true}
-            />
-            <View style={{ marginTop: 20 }}></View>
-            <TextInput
-              label="Confirm Your pin"
-              keyboardType="decimal-pad"
-              passwordRules={true}
-              onChange={setConfirmPin}
-              style={{ backgroundColor: "white" }}
-              secureTextEntry={true}
-            />
-
-            <View style={{ marginTop: 40 }}></View>
-
-            <Button
-              mode="contained"
-              style={styles.TabButton}
-              labelStyle={{ color: "white", fontSize: 14 }}
-              onPress={handleSubmit}
+      <View style={styles.explore}>
+        <StatusBar barStyle="default" />
+        <ScrollView
+          style={styles.exploreMainView}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.exploreMainViewContent}
+        >
+          <View style={{ marginTop: 20 }}>
+            <Text
+              style={[
+                styles.trendingDestinations,
+                { color: "black", fontSize: 20 },
+              ]}
             >
-              Submit
-            </Button>
-          </ScrollView>
-        </View>
-      </ScrollView>
-    </View>
+              Deposit
+            </Text>
+          </View>
+
+          <View style={[styles.exploreContent, styles.mt20]}>
+            <View style={styles.trendingHeader}>
+              <Text style={styles.trendingDestinations}>Select Currency</Text>
+            </View>
+
+            <View style={{ borderRadius: 12 }}>
+              <View style={styles.selectContainer}>
+                <Picker
+                  selectedValue={sendValue}
+                  style={{ height: 15, width: 200 }}
+                  onValueChange={(itemValue) => setSendValue(itemValue)}
+                >
+                  <Picker.Item label="select account type" value="" />
+
+                  {currencyOptions.map((item, i) => {
+                    return (
+                      <Picker.Item
+                        key={i}
+                        label={item.label}
+                        value={item.value}
+                      />
+                    );
+                  })}
+                </Picker>
+              </View>
+            </View>
+          </View>
+          <View style={[styles.trendingDestinations1, styles.mt30]}>
+            <ScrollView
+              style={[styles.trendingCardsView, styles.mt14]}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.trendingCardsViewContent}
+            >
+     
+              <View style={{ marginTop: 20 }}></View>
+              <TextInput
+                label="Enter Deposit AMount"
+                keyboardType="decimal-pad"
+                passwordRules={true}
+                onChange={setConfirmPin}
+                style={{ backgroundColor: "white" }}
+               
+              />
+
+              <View style={{ marginTop: 40 }}></View>
+
+              <TouchableOpacity
+                mode="contained"
+                style={styles.TabButton}
+                labelStyle={{ color: "white", fontSize: 14 }}
+                onPress={() => init()}
+              >
+                <Text>Submit</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </ScrollView>
+      </View>
+   
+
   );
 };
 
@@ -1139,4 +1045,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LinkAccount2;
+export default Deposit;
