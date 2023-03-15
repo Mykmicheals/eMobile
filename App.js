@@ -210,6 +210,7 @@ const App = () => {
 
     amount: 10000,
     onClose: () => alert("Widget closed"),
+    onSuccess:()=>alert('Payment Sucess'),
     data: {
       amount: 10000,
       type: "onetime-debit",
