@@ -9,8 +9,9 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@aws-amplify/cli": "^11.0.0",
     "@mono.co/connect-react-native": "^0.2.0",
-    "@react-native-async-storage/async-storage": "^1.17.11",
+    "@react-native-async-storage/async-storage": "^1.17.12",
     "@react-native-community/netinfo": "^9.3.7",
     "@react-native-picker/picker": "^2.4.8",
     "@react-navigation/bottom-tabs": "^6.3.1",
@@ -24,7 +25,7 @@
     "@react-navigation/routers": "^6.1.0",
     "@react-navigation/stack": "^6.2.1",
     "amazon-cognito-identity-js": "^6.1.2",
-    "aws-amplify": "^5.0.11",
+    "aws-amplify": "^5.0.19",
     "aws-amplify-react-native": "^7.0.2",
     "easy-peasy": "^5.2.0",
     "expo": "^47.0.13",

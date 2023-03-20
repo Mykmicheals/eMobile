@@ -1,36 +1,16 @@
-import { ModelInit, MutableModel } from "@aws-amplify/datastore";
+import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncCollection } from "@aws-amplify/datastore";
 
-type SwapTicketMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
 
-type OrderBookMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
 
-type OrderTicketMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
 
-type PaymentProviderMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
-type UserAccountMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
-type UseraccessMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
-type UserDataMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
 
 type EagerSwapTicket = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<SwapTicket, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly UserID: string;
   readonly CurrencyPair: string;
@@ -43,6 +23,10 @@ type EagerSwapTicket = {
 }
 
 type LazySwapTicket = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<SwapTicket, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly UserID: string;
   readonly CurrencyPair: string;
@@ -56,11 +40,15 @@ type LazySwapTicket = {
 
 export declare type SwapTicket = LazyLoading extends LazyLoadingDisabled ? EagerSwapTicket : LazySwapTicket
 
-export declare const SwapTicket: (new (init: ModelInit<SwapTicket, SwapTicketMetaData>) => SwapTicket) & {
-  copyOf(source: SwapTicket, mutator: (draft: MutableModel<SwapTicket, SwapTicketMetaData>) => MutableModel<SwapTicket, SwapTicketMetaData> | void): SwapTicket;
+export declare const SwapTicket: (new (init: ModelInit<SwapTicket>) => SwapTicket) & {
+  copyOf(source: SwapTicket, mutator: (draft: MutableModel<SwapTicket>) => MutableModel<SwapTicket> | void): SwapTicket;
 }
 
 type EagerOrderBook = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<OrderBook, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly UserID: string;
   readonly Currency: string;
@@ -74,6 +62,10 @@ type EagerOrderBook = {
 }
 
 type LazyOrderBook = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<OrderBook, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly UserID: string;
   readonly Currency: string;
@@ -88,11 +80,15 @@ type LazyOrderBook = {
 
 export declare type OrderBook = LazyLoading extends LazyLoadingDisabled ? EagerOrderBook : LazyOrderBook
 
-export declare const OrderBook: (new (init: ModelInit<OrderBook, OrderBookMetaData>) => OrderBook) & {
-  copyOf(source: OrderBook, mutator: (draft: MutableModel<OrderBook, OrderBookMetaData>) => MutableModel<OrderBook, OrderBookMetaData> | void): OrderBook;
+export declare const OrderBook: (new (init: ModelInit<OrderBook>) => OrderBook) & {
+  copyOf(source: OrderBook, mutator: (draft: MutableModel<OrderBook>) => MutableModel<OrderBook> | void): OrderBook;
 }
 
 type EagerOrderTicket = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<OrderTicket, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly UserID: string;
   readonly CurrencySend: string;
@@ -103,6 +99,10 @@ type EagerOrderTicket = {
 }
 
 type LazyOrderTicket = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<OrderTicket, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly UserID: string;
   readonly CurrencySend: string;
@@ -114,11 +114,15 @@ type LazyOrderTicket = {
 
 export declare type OrderTicket = LazyLoading extends LazyLoadingDisabled ? EagerOrderTicket : LazyOrderTicket
 
-export declare const OrderTicket: (new (init: ModelInit<OrderTicket, OrderTicketMetaData>) => OrderTicket) & {
-  copyOf(source: OrderTicket, mutator: (draft: MutableModel<OrderTicket, OrderTicketMetaData>) => MutableModel<OrderTicket, OrderTicketMetaData> | void): OrderTicket;
+export declare const OrderTicket: (new (init: ModelInit<OrderTicket>) => OrderTicket) & {
+  copyOf(source: OrderTicket, mutator: (draft: MutableModel<OrderTicket>) => MutableModel<OrderTicket> | void): OrderTicket;
 }
 
 type EagerPaymentProvider = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<PaymentProvider, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly Name?: string | null;
   readonly AddressID?: string | null;
@@ -129,6 +133,10 @@ type EagerPaymentProvider = {
 }
 
 type LazyPaymentProvider = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<PaymentProvider, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly Name?: string | null;
   readonly AddressID?: string | null;
@@ -140,11 +148,15 @@ type LazyPaymentProvider = {
 
 export declare type PaymentProvider = LazyLoading extends LazyLoadingDisabled ? EagerPaymentProvider : LazyPaymentProvider
 
-export declare const PaymentProvider: (new (init: ModelInit<PaymentProvider, PaymentProviderMetaData>) => PaymentProvider) & {
-  copyOf(source: PaymentProvider, mutator: (draft: MutableModel<PaymentProvider, PaymentProviderMetaData>) => MutableModel<PaymentProvider, PaymentProviderMetaData> | void): PaymentProvider;
+export declare const PaymentProvider: (new (init: ModelInit<PaymentProvider>) => PaymentProvider) & {
+  copyOf(source: PaymentProvider, mutator: (draft: MutableModel<PaymentProvider>) => MutableModel<PaymentProvider> | void): PaymentProvider;
 }
 
 type EagerUserAccount = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserAccount, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly UserID?: string | null;
   readonly PaymentProviderID?: string | null;
@@ -158,6 +170,10 @@ type EagerUserAccount = {
 }
 
 type LazyUserAccount = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserAccount, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly UserID?: string | null;
   readonly PaymentProviderID?: string | null;
@@ -172,11 +188,15 @@ type LazyUserAccount = {
 
 export declare type UserAccount = LazyLoading extends LazyLoadingDisabled ? EagerUserAccount : LazyUserAccount
 
-export declare const UserAccount: (new (init: ModelInit<UserAccount, UserAccountMetaData>) => UserAccount) & {
-  copyOf(source: UserAccount, mutator: (draft: MutableModel<UserAccount, UserAccountMetaData>) => MutableModel<UserAccount, UserAccountMetaData> | void): UserAccount;
+export declare const UserAccount: (new (init: ModelInit<UserAccount>) => UserAccount) & {
+  copyOf(source: UserAccount, mutator: (draft: MutableModel<UserAccount>) => MutableModel<UserAccount> | void): UserAccount;
 }
 
 type EagerUseraccess = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Useraccess, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly user_id?: string | null;
   readonly login?: string | null;
@@ -198,6 +218,10 @@ type EagerUseraccess = {
 }
 
 type LazyUseraccess = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Useraccess, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly user_id?: string | null;
   readonly login?: string | null;
@@ -220,11 +244,15 @@ type LazyUseraccess = {
 
 export declare type Useraccess = LazyLoading extends LazyLoadingDisabled ? EagerUseraccess : LazyUseraccess
 
-export declare const Useraccess: (new (init: ModelInit<Useraccess, UseraccessMetaData>) => Useraccess) & {
-  copyOf(source: Useraccess, mutator: (draft: MutableModel<Useraccess, UseraccessMetaData>) => MutableModel<Useraccess, UseraccessMetaData> | void): Useraccess;
+export declare const Useraccess: (new (init: ModelInit<Useraccess>) => Useraccess) & {
+  copyOf(source: Useraccess, mutator: (draft: MutableModel<Useraccess>) => MutableModel<Useraccess> | void): Useraccess;
 }
 
 type EagerUserData = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserData, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly Username?: string | null;
   readonly Email?: string | null;
@@ -238,6 +266,10 @@ type EagerUserData = {
 }
 
 type LazyUserData = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserData, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly Username?: string | null;
   readonly Email?: string | null;
@@ -252,6 +284,6 @@ type LazyUserData = {
 
 export declare type UserData = LazyLoading extends LazyLoadingDisabled ? EagerUserData : LazyUserData
 
-export declare const UserData: (new (init: ModelInit<UserData, UserDataMetaData>) => UserData) & {
-  copyOf(source: UserData, mutator: (draft: MutableModel<UserData, UserDataMetaData>) => MutableModel<UserData, UserDataMetaData> | void): UserData;
+export declare const UserData: (new (init: ModelInit<UserData>) => UserData) & {
+  copyOf(source: UserData, mutator: (draft: MutableModel<UserData>) => MutableModel<UserData> | void): UserData;
 }

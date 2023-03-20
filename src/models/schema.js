@@ -246,7 +246,9 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "orderticketID"
+                        "associatedWith": [
+                            "orderticketID"
+                        ]
                     }
                 },
                 "createdAt": {
@@ -733,6 +735,6 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "codegenVersion": "3.3.4",
+    "codegenVersion": "3.3.6",
     "version": "5aa3f4b0e8dd86ab3549fb693e507720"
 };

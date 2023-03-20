@@ -15,9 +15,7 @@ import { DataStore, Auth } from 'aws-amplify'
 import {
   SwapTicket,
 } from '../src/models'
-// import getTime from '../src/helpers/time'
-// const Naira = require('../assets/dollar.png');
-// const Dollar = require('../assets/nigeria_flag.png');
+
 import { TextInput, Button, Checkbox } from 'react-native-paper';
 
 const OrderBook = () => {

@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
-import { DataStore, Auth } from "aws-amplify";
-import { SwapTicket } from "../src/models";
-import { TextInput, Button, Checkbox } from "react-native-paper";
-import { MonoProvider, useMonoConnect } from "@mono.co/connect-react-native";
+import { Auth } from "aws-amplify";
+import { TextInput, Button } from "react-native-paper";
+import { useMonoConnect } from "@mono.co/connect-react-native";
+import { DataStore } from "aws-amplify";
+import { UserData, OrderTicket } from "../src/models";
 
 const LinkAccount2 = () => {
   const currencyOptions = [
@@ -50,7 +50,6 @@ const LinkAccount2 = () => {
 
     onload();
   }, []);
-
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
@@ -89,21 +88,29 @@ const LinkAccount2 = () => {
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
+  };
 
-    console.log(body);
+  const handleSubmit = async () => {
+    // createWallet();
+    // if (selectedCountry === "" || sendValue === "") {
+    //   alert("Pls selcect all fields");
+    // } else {
+    //   init();
+    // }
+
+    await DataStore.save(
+      new UserData({
+        "Username": "myk",
+        "Email": user.email,
+        // cognitoId: user.sub,
+        "CognitoId": "nhdbxbdmvcs",
+        "AccountBallance": 0.0,
+       
+      })
+    );
   };
 
   console.log(user);
-
-  const handleSubmit = async () => {
-    createWallet();
-
-    if (selectedCountry === "" || sendValue === "") {
-      alert("Pls selcect all fields");
-    } else {
-      init();
-    }
-  };
 
   return (
     <View style={styles.explore}>
