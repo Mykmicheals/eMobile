@@ -13,8 +13,10 @@ import { Picker } from "@react-native-picker/picker";
 import { TextInput } from "react-native-paper";
 import { useMonoConnect } from "@mono.co/connect-react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+import { useStoreState } from "easy-peasy";
 const Deposit = () => {
+  const todos = useStoreState((state) => state.accountNumber);
+
   const currencyOptions = [
     { label: "🇳🇬    Nigerian NGN", value: "NGN" },
     { label: "🇺🇸    Dollar USD", value: "USD" },
@@ -25,6 +27,8 @@ const Deposit = () => {
   const [countries, setCountries] = useState([]);
 
   const [user, setUser] = useState(null);
+
+  console.log(todos);
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
