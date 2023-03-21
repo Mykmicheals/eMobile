@@ -40,9 +40,8 @@ import { Amplify } from "aws-amplify";
 import config from "./src/aws-exports";
 import { withAuthenticator } from "aws-amplify-react-native";
 import OrderBook from "./screens/Swap";
-import LinkAccount from "./screens/LinkAccount";
 import { MonoProvider } from "@mono.co/connect-react-native";
-import LinkAccount2 from "./screens/LinkAccount2";
+import LinkAccount from "./screens/LinkAccount";
 import Deposit from "./screens/Deposit";
 import { DataStore } from "aws-amplify";
 import { UserData, OrderTicket } from "./src/models";
@@ -302,7 +301,7 @@ const App = () => {
 
             <Stack.Screen
               name="linkaccount"
-              component={LinkAccount2}
+              component={LinkAccount}
               options={{ headerShown: false }}
             />
 
