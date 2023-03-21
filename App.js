@@ -45,6 +45,8 @@ import LinkAccount from "./screens/LinkAccount";
 import Deposit from "./screens/Deposit";
 import { DataStore } from "aws-amplify";
 import { UserData, OrderTicket } from "./src/models";
+import { StoreProvider } from "easy-peasy";
+import { store } from "./src/store";
 
 Amplify.configure(config);
 const Drawer = createDrawerNavigator();
@@ -245,79 +247,81 @@ const App = () => {
   };
 
   return (
-    <MonoProvider {...config}>
-      <NavigationContainer>
-        {hideSplashScreen ? (
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="DrawerRoot" component={DrawerRoot} />
+    <StoreProvider store={store}>
+      <MonoProvider {...config}>
+        <NavigationContainer>
+          {hideSplashScreen ? (
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="DrawerRoot" component={DrawerRoot} />
 
-            <Stack.Screen
-              name="SearchResults"
-              component={SearchResults}
-              options={(props) => ({
-                headerShown: true,
-                header: () => <Group41 />,
-              })}
-            />
-            <Stack.Screen
-              name="Swap"
-              component={Swap}
-              options={(props) => ({
-                headerShown: true,
-                header: () => <Group4 />,
-              })}
-            />
-            <Stack.Screen
-              name="oderTicket"
-              component={OrderList}
-              options={(props) => ({
-                headerShown: true,
-                header: () => <Group4 />,
-              })}
-            />
-            <Stack.Screen
-              name="SearchTwoWay"
-              component={SearchTwoWay}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="SearchResultsBody"
-              component={SearchResultsBody}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="SplashScreen"
-              component={SplashScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Instructions"
-              component={Instructions}
-              options={(props) => ({
-                headerShown: true,
-                header: () => <Header3 />,
-              })}
-            />
+              <Stack.Screen
+                name="SearchResults"
+                component={SearchResults}
+                options={(props) => ({
+                  headerShown: true,
+                  header: () => <Group41 />,
+                })}
+              />
+              <Stack.Screen
+                name="Swap"
+                component={Swap}
+                options={(props) => ({
+                  headerShown: true,
+                  header: () => <Group4 />,
+                })}
+              />
+              <Stack.Screen
+                name="oderTicket"
+                component={OrderList}
+                options={(props) => ({
+                  headerShown: true,
+                  header: () => <Group4 />,
+                })}
+              />
+              <Stack.Screen
+                name="SearchTwoWay"
+                component={SearchTwoWay}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="SearchResultsBody"
+                component={SearchResultsBody}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="SplashScreen"
+                component={SplashScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Instructions"
+                component={Instructions}
+                options={(props) => ({
+                  headerShown: true,
+                  header: () => <Header3 />,
+                })}
+              />
 
-            <Stack.Screen
-              name="linkaccount"
-              component={LinkAccount}
-              options={{ headerShown: false }}
-            />
+              <Stack.Screen
+                name="linkaccount"
+                component={LinkAccount}
+                options={{ headerShown: false }}
+              />
 
-            <Stack.Screen name="deposit">
-              {() => (
-                <MonoProvider {...{ ...payConfig }}>
-                  <Deposit />
-                </MonoProvider>
-              )}
-            </Stack.Screen>
-          </Stack.Navigator>
-        ) : (
-          <SplashScreen />
-        )}
-      </NavigationContainer>
-    </MonoProvider>
+              <Stack.Screen name="deposit">
+                {() => (
+                  <MonoProvider {...{ ...payConfig }}>
+                    <Deposit />
+                  </MonoProvider>
+                )}
+              </Stack.Screen>
+            </Stack.Navigator>
+          ) : (
+            <SplashScreen />
+          )}
+        </NavigationContainer>
+      </MonoProvider>
+    </StoreProvider>
   );
 };
 export default withAuthenticator(App);
