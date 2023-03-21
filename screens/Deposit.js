@@ -10,15 +10,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
-import { DataStore, Auth } from "aws-amplify";
-import { SwapTicket } from "../src/models";
-import { TextInput, Button, Checkbox } from "react-native-paper";
-import {
-  useMonoConnect,
-  MonoConnect,
-  MonoProvider,
-  MonoPay
-} from "@mono.co/connect-react-native";
+import { TextInput } from "react-native-paper";
+import { useMonoConnect } from "@mono.co/connect-react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Deposit = () => {
   const currencyOptions = [
@@ -28,9 +22,7 @@ const Deposit = () => {
   const [pin, setPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
   const [sendValue, setSendValue] = useState("NGN");
-  const [receiveValue, setReceiveValue] = useState("USD");
   const [countries, setCountries] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState("");
 
   const [user, setUser] = useState(null);
 
@@ -52,92 +44,98 @@ const Deposit = () => {
 
   const [amount, setAmount] = useState();
 
+  const navigation = useNavigation();
 
+  const handleBackPress = () => {
+    navigation.goBack();
+  };
 
   const { init } = useMonoConnect();
 
   return (
+    <View style={styles.explore}>
+      <StatusBar barStyle="default" />
 
-      <View style={styles.explore}>
-        <StatusBar barStyle="default" />
-        <ScrollView
-          style={styles.exploreMainView}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.exploreMainViewContent}
-        >
-          <View style={{ marginTop: 20 }}>
-            <Text
-              style={[
-                styles.trendingDestinations,
-                { color: "black", fontSize: 20 },
-              ]}
-            >
-              Deposit
-            </Text>
+      <TouchableOpacity
+        style={{ top: 16, left: 20 }}
+        onPress={() => handleBackPress()}
+      >
+        <Ionicons name="arrow-back" size={30} color="black" />
+      </TouchableOpacity>
+      <ScrollView
+        style={styles.exploreMainView}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.exploreMainViewContent}
+      >
+        <View style={{ marginTop: 20 }}>
+          <Text
+            style={[
+              styles.trendingDestinations,
+              { color: "black", fontSize: 20 },
+            ]}
+          >
+            Deposit
+          </Text>
+        </View>
+
+        <View style={[styles.exploreContent, styles.mt20]}>
+          <View style={styles.trendingHeader}>
+            <Text style={styles.trendingDestinations}>Select Currency</Text>
           </View>
 
-          <View style={[styles.exploreContent, styles.mt20]}>
-            <View style={styles.trendingHeader}>
-              <Text style={styles.trendingDestinations}>Select Currency</Text>
-            </View>
-
-            <View style={{ borderRadius: 12 }}>
-              <View style={styles.selectContainer}>
-                <Picker
-                  selectedValue={sendValue}
-                  style={{ height: 15, width: 200 }}
-                  onValueChange={(itemValue) => setSendValue(itemValue)}
-                >
-                  <Picker.Item label="select account type" value="" />
-
-                  {currencyOptions.map((item, i) => {
-                    return (
-                      <Picker.Item
-                        key={i}
-                        label={item.label}
-                        value={item.value}
-                      />
-                    );
-                  })}
-                </Picker>
-              </View>
-            </View>
-          </View>
-          <View style={[styles.trendingDestinations1, styles.mt30]}>
-            <ScrollView
-              style={[styles.trendingCardsView, styles.mt14]}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.trendingCardsViewContent}
-            >
-     
-              <View style={{ marginTop: 20 }}></View>
-              <TextInput
-                label="Enter Deposit AMount"
-                keyboardType="decimal-pad"
-                passwordRules={true}
-                onChange={setConfirmPin}
-                style={{ backgroundColor: "white" }}
-               
-              />
-
-              <View style={{ marginTop: 40 }}></View>
-
-              <TouchableOpacity
-                mode="contained"
-                style={styles.TabButton}
-                labelStyle={{ color: "white", fontSize: 14 }}
-                onPress={() => init()}
+          <View style={{ borderRadius: 12 }}>
+            <View style={styles.selectContainer}>
+              <Picker
+                selectedValue={sendValue}
+                style={{ height: 15, width: 200 }}
+                onValueChange={(itemValue) => setSendValue(itemValue)}
               >
-                <Text>Submit</Text>
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
-        </ScrollView>
-      </View>
-   
+                <Picker.Item label="select account type" value="" />
 
+                {currencyOptions.map((item, i) => {
+                  return (
+                    <Picker.Item
+                      key={i}
+                      label={item.label}
+                      value={item.value}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
+          </View>
+        </View>
+        <View style={[styles.trendingDestinations1, styles.mt30]}>
+          <ScrollView
+            style={[styles.trendingCardsView, styles.mt14]}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.trendingCardsViewContent}
+          >
+            <View style={{ marginTop: 20 }}></View>
+            <TextInput
+              label="Enter Deposit AMount"
+              keyboardType="decimal-pad"
+              passwordRules={true}
+              onChange={setConfirmPin}
+              style={{ backgroundColor: "white" }}
+            />
+
+            <View style={{ marginTop: 40 }}></View>
+
+            <TouchableOpacity
+              mode="contained"
+              style={styles.TabButton}
+              labelStyle={{ color: "white", fontSize: 14 }}
+              onPress={() => init()}
+            >
+              <Text>Submit</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

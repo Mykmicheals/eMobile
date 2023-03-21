@@ -126,6 +126,7 @@ const LinkAccount = () => {
       >
         <Ionicons name="arrow-back" size={30} color="black" />
       </TouchableOpacity>
+
       <ScrollView
         style={styles.exploreMainView}
         showsHorizontalScrollIndicator={false}
