@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
   StatusBar,
   StyleSheet,
@@ -12,37 +12,37 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Avatar } from 'react-native-paper';
-import { Button } from 'react-native-paper';
-import SelectDropdown from 'react-native-select-dropdown';
-import { Auth } from 'aws-amplify';
-import { Picker } from '@react-native-picker/picker';
-
+import { Avatar } from "react-native-paper";
+import { Button } from "react-native-paper";
+import SelectDropdown from "react-native-select-dropdown";
+import { Auth } from "aws-amplify";
+import { Picker } from "@react-native-picker/picker";
 
 const Explore = () => {
   const navigation = useNavigation();
-  const [currency, setCurrency] = React.useState(false)
-  const currenctyOptions = [{ label: "🇳🇬 NGN", value: 'NGN' }, { label: "🇺🇸 USD", value: "USD" }]
-  const [user, setUser] = useState(null)
+  const [currency, setCurrency] = React.useState(false);
+  const currenctyOptions = [
+    { label: "🇳🇬 NGN", value: "NGN" },
+    { label: "🇺🇸 USD", value: "USD" },
+  ];
+  const [user, setUser] = useState(null);
   useEffect(() => {
     function loadUser() {
-      return Auth.currentAuthenticatedUser({ bypassCache: true })
+      return Auth.currentAuthenticatedUser({ bypassCache: true });
     }
 
     async function onload() {
       try {
-        const user = await loadUser()
-        setUser(user.attributes)
+        const user = await loadUser();
+        setUser(user.attributes);
       } catch (e) {
-        alert(e)
+        alert(e);
       }
     }
 
-    onload()
+    onload();
+  }, []);
 
-  }, [])
-
-  
   return (
     <View style={styles.explore}>
       <StatusBar barStyle="default" />
@@ -63,25 +63,47 @@ const Explore = () => {
               <View style={{ width: "40%" }}>
                 <Picker
                   selectedValue={currency}
-                  style={{ height: 8, width: "100%", backgroundColor: "white", color: "black" }}
+                  style={{
+                    height: 8,
+                    width: "100%",
+                    backgroundColor: "white",
+                    color: "black",
+                  }}
                   onValueChange={(itemValue) => setCurrency(itemValue)}
                 >
                   {currenctyOptions.map((item, i) => {
                     return (
-
-                      <Picker.Item key={i} label={item.label} value={item.value} />
-                    )
+                      <Picker.Item
+                        key={i}
+                        label={item.label}
+                        value={item.value}
+                      />
+                    );
                   })}
-
                 </Picker>
               </View>
             </View>
             <View>
-              <Text style={styles.text}> {currency ? "$1299" : "N598189.50"} </Text>
+              <Text style={styles.text}>
+                {" "}
+                {currency ? "$1299" : "N598189.50"}{" "}
+              </Text>
             </View>
-            <Button mode="outlined" style={[styles.TabButton, { marginTop: 20, height: 40, backgroundColor: "white", borderColor: "#0063F5", padding: 0 }]}
+            <Button
+              mode="outlined"
+              style={[
+                styles.TabButton,
+                {
+                  marginTop: 20,
+                  height: 40,
+                  backgroundColor: "white",
+                  borderColor: "#0063F5",
+                  padding: 0,
+                },
+              ]}
               labelStyle={{ color: "#0063F5", fontSize: 10 }}
-              onPress={() => console.log('Pressed')}>
+              onPress={() => console.log("Pressed")}
+            >
               Create Swap Order
             </Button>
           </View>
@@ -92,23 +114,38 @@ const Explore = () => {
           /> */}
         </ImageBackground>
         <View style={[styles.trendingDestinations1, styles.mt30, styles.FLEX]}>
-          <Button mode="contained" style={styles.TabButton} onPress={() => console.log('Pressed')}>
+          <Button
+            mode="contained"
+            style={styles.TabButton}
+            onPress={(navigate) => {
+              navigation.navigate("deposit");
+            }}
+          >
             Deposit
           </Button>
-          <Button mode="outlined" style={[styles.TabButton, { backgroundColor: "white", borderWidth: 1.5, borderColor: "#0063F5" }]}
+          <Button
+            mode="outlined"
+            style={[
+              styles.TabButton,
+              {
+                backgroundColor: "white",
+                borderWidth: 1.5,
+                borderColor: "#0063F5",
+              },
+            ]}
             labelStyle={{ color: "#0063F5" }}
-            onPress={() => console.log('Pressed')}>
+            onPress={() => console.log("Pressed")}
+          >
             Withdrawal
           </Button>
         </View>
         <View style={[styles.exploreContent, styles.mt20]}>
-
           <View style={[styles.trendingDestinations1, styles.mt30]}>
             <View style={styles.trendingHeader}>
               <Text style={styles.trendingDestinations}>
                 Recent Transactions
               </Text>
-              <TouchableOpacity onPress={() => { }}>
+              <TouchableOpacity onPress={() => {}}>
                 <Text style={styles.seeAll}>View More >></Text>
               </TouchableOpacity>
             </View>
@@ -118,20 +155,28 @@ const Explore = () => {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.trendingCardsViewContent}
             >
-
-              <CoinComponent action='Currency Swap' avatar="CA" user={"Chike A"} amount="5400" currency={"NGN"} />
-              <CoinComponent action='Deposit' avatar="DW" user={"Dare W"} amount="5400" currency={"NGN"} />
+              <CoinComponent
+                action="Currency Swap"
+                avatar="CA"
+                user={"Chike A"}
+                amount="5400"
+                currency={"NGN"}
+              />
+              <CoinComponent
+                action="Deposit"
+                avatar="DW"
+                user={"Dare W"}
+                amount="5400"
+                currency={"NGN"}
+              />
               {/* <CoinComponent action='Withdrawal' avatar="SJ" user={"Samuel John"} amount="5400" currency={"NGN"} />
               <CoinComponent action='Currency Swap' avatar="JD" user={"Johny Depp"} amount="5400" currency={"NGN"} /> */}
-
             </ScrollView>
           </View>
           <View style={[styles.offersSection, styles.mt30]}>
             <View style={styles.trendingHeader}>
-              <Text style={styles.trendingDestinations}>
-                Recent Swaps
-              </Text>
-              <TouchableOpacity onPress={() => { }}>
+              <Text style={styles.trendingDestinations}>Recent Swaps</Text>
+              <TouchableOpacity onPress={() => {}}>
                 <Text style={styles.seeAll}>View More >></Text>
               </TouchableOpacity>
             </View>
@@ -140,15 +185,27 @@ const Explore = () => {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
             >
-              <CoinComponent action='Currency Swap' avatar="CA" user={"Chike A"} amount="5400" currency={"NGN"} />
-              <CoinComponent action='Deposit' avatar="DW" user={"Dare W"} amount="5400" currency={"NGN"} />
+              <CoinComponent
+                action="Currency Swap"
+                avatar="CA"
+                user={"Chike A"}
+                amount="5400"
+                currency={"NGN"}
+              />
+              <CoinComponent
+                action="Deposit"
+                avatar="DW"
+                user={"Dare W"}
+                amount="5400"
+                currency={"NGN"}
+              />
               {/* <CoinComponent action='Withdrawal' avatar="SJ" user={"Samuel John"} amount="5400" currency={"NGN"} /> */}
               {/* <CoinComponent action='Currency Swap' avatar="JD" user={"Johny Depp"} amount="5400" currency={"NGN"} /> */}
             </ScrollView>
           </View>
         </View>
-      </ScrollView >
-    </View >
+      </ScrollView>
+    </View>
   );
 };
 
@@ -540,7 +597,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     color: "#1262ae",
     textAlign: "left",
-    marginTop: 2
+    marginTop: 2,
   },
   trendingHeader: {
     alignSelf: "stretch",
@@ -1001,7 +1058,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignContent: "center",
     shadowColor: "gray",
-    marginHorizontal: "auto"
+    marginHorizontal: "auto",
   },
 
   FLEX: {
@@ -1010,7 +1067,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: "auto",
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
   COIN_TEXT_CONTAINER: {
     display: "flex",
@@ -1026,17 +1083,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "gray",
     fontWeight: "normal",
-  }
-  ,
+  },
   COIN_TEXT_CONTAINER: {
     display: "flex",
-  }
-  , TabButton:
-    { width: "49%", height: 50, display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#0063F5" }
+  },
+  TabButton: {
+    width: "49%",
+    height: 50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0063F5",
+  },
 });
 
 export default Explore;
-
 
 const CoinComponent = ({ avatar, user, amount, currency, action }) => {
   return (
@@ -1044,7 +1105,9 @@ const CoinComponent = ({ avatar, user, amount, currency, action }) => {
       <View style={styles.FLEX}>
         <Avatar.Text size={44} label={avatar} />
         <View style={[styles.COIN_TEXT_CONTAINER, { marginLeft: 20 }]}>
-          <Text style={[styles.COINT_ITEM, { textTransform: "capitalize" }]}>{user}</Text>
+          <Text style={[styles.COINT_ITEM, { textTransform: "capitalize" }]}>
+            {user}
+          </Text>
           <Text style={styles.SUB_TEXT}>{action}</Text>
         </View>
       </View>
