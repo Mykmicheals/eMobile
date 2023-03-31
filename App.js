@@ -30,23 +30,23 @@ import Header from "./components/Header";
 import Group41 from "./components/Group41";
 import Group4 from "./components/Group4";
 import Header3 from "./components/Header3";
-
+import { useState, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // AWS IMPORTS
+import { Auth } from "aws-amplify";
 import { Amplify } from "aws-amplify";
 import config from "./src/aws-exports";
 import { withAuthenticator } from "aws-amplify-react-native";
 import OrderBook from "./screens/Swap";
-import { MonoProvider } from "@mono.co/connect-react-native";
 import LinkAccount from "./screens/LinkAccount";
+import { MonoProvider } from "@mono.co/connect-react-native";
 import Deposit from "./screens/Deposit";
 import { DataStore } from "aws-amplify";
-import { UserData, OrderTicket } from "./src/models";
-import { StoreProvider } from "easy-peasy";
-import { store } from "./src/store";
+import { UserData, OrderTicket, UserAccount } from "./src/models";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 Amplify.configure(config);
 const Drawer = createDrawerNavigator();
@@ -174,6 +174,32 @@ function BottomTabsRoot({ navigation }) {
 ``;
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
+  const [depositAmount, setDepositAmount] = useState();
+  const [accountId, setAccountId] = useState(0);
+  const [accountIdFromStorage, setAccountIdFromStorage] = useState(null);
+
+  const handleDeposit = (amount) => {
+    setDepositAmount(amount);
+    console.warn(amount);
+  };
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    function loadUser() {
+      return Auth.currentAuthenticatedUser({ bypassCache: true });
+    }
+
+    async function onload() {
+      try {
+        const user = await loadUser();
+        setUser(user.attributes);
+      } catch (e) {
+        alert(e);
+      }
+    }
+
+    onload();
+  }, []);
 
   useFonts({
     "Baloo Bhai 2": require("./assets/fonts/Baloo_Bhai_2.ttf"),
@@ -193,135 +219,150 @@ const App = () => {
   }, []);
 
   const config = {
-    publicKey: "test_pk_txILHvD85YFmYmDWIynt",
+    publicKey: "test_pk_mEVJ1sNSFRzHPcyq1jN3",
     onClose: () => alert("Widget closed"),
     onSuccess: async (data) => {
       const code = data.getAuthCode();
-      console.log("Access code", code);
+      // console.log("Access code", code);
 
       const options = {
         method: "POST",
         headers: {
           accept: "application/json",
-          "mono-sec-key": "test_sk_7U2TH2kPxGwwrmpB6Hik",
+          "mono-sec-key": "test_sk_IYcOmUnqdFkgVdMVyN0H",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ code: code }),
       };
+      try {
+        const response = await fetch(
+          "https://api.withmono.com/account/auth",
+          options
+        );
+        const data = await response.json();
+        const models = await DataStore.save(
+          new UserAccount({
+            UserID: user.sub,
+            AccountNumberID: data.id,
+          })
+        );
+        await AsyncStorage.setItem("accountId", data.id);
+         setAccountId(data.id);
 
-      fetch("https://api.withmono.com/account/auth", options)
-        .then((response) => response.json())
-        .then((response) => console.log(response))
-        .catch((err) => console.error(err));
+        // const userAccounts = await DataStore.query(UserAccount, (u) =>
+        //   u.UserID.eq("4e710e9c-a95d-4d25-ac0a-d5988eb966fa")
+        // );
 
-      const models = await DataStore.save(
-        new UserData({
-          cognitoId: "myk",
-          // "Username":""
-        })
-      );
-      console.log(models);
+        // console.log(userAccounts);
+      } catch (err) {
+        console.error(err);
+      }
     },
 
     reference: "random_string", // optional
     onEvent: (eventName, data) => {
       // optional
-      console.log(eventName);
-      console.log(data);
     },
   };
+
+  const getId = async () => {
+    const value = await AsyncStorage.getItem("accountId");
+    setAccountId(value)
+  };
+
+  useEffect(() => {
+    getId();
+  }, [accountId]);
+
+  console.log(`pay config id ${accountId}`);
 
   const payConfig = {
     scope: "payments",
     publicKey: "test_pk_txILHvD85YFmYmDWIynt",
-
-    amount: 10000,
     onClose: () => alert("Widget closed"),
     onSuccess: () => alert("Payment Sucess"),
     data: {
       amount: 10000,
       type: "onetime-debit",
-      // account: "640f45c8382507604bfa96a1",
-      account: "6412ea4e10b58e0dfdaedc73",
+     // account: accountIdFromStorage || accountId,
+      account: accountId,
     },
   };
 
   return (
-    <StoreProvider store={store}>
-      <MonoProvider {...config}>
-        <NavigationContainer>
-          {hideSplashScreen ? (
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="DrawerRoot" component={DrawerRoot} />
+    <MonoProvider {...config}>
+      <NavigationContainer>
+        {hideSplashScreen ? (
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="DrawerRoot" component={DrawerRoot} />
 
-              <Stack.Screen
-                name="SearchResults"
-                component={SearchResults}
-                options={(props) => ({
-                  headerShown: true,
-                  header: () => <Group41 />,
-                })}
-              />
-              <Stack.Screen
-                name="Swap"
-                component={Swap}
-                options={(props) => ({
-                  headerShown: true,
-                  header: () => <Group4 />,
-                })}
-              />
-              <Stack.Screen
-                name="oderTicket"
-                component={OrderList}
-                options={(props) => ({
-                  headerShown: true,
-                  header: () => <Group4 />,
-                })}
-              />
-              <Stack.Screen
-                name="SearchTwoWay"
-                component={SearchTwoWay}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="SearchResultsBody"
-                component={SearchResultsBody}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="SplashScreen"
-                component={SplashScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Instructions"
-                component={Instructions}
-                options={(props) => ({
-                  headerShown: true,
-                  header: () => <Header3 />,
-                })}
-              />
+            <Stack.Screen
+              name="SearchResults"
+              component={SearchResults}
+              options={(props) => ({
+                headerShown: true,
+                header: () => <Group41 />,
+              })}
+            />
+            <Stack.Screen
+              name="Swap"
+              component={Swap}
+              options={(props) => ({
+                headerShown: true,
+                header: () => <Group4 />,
+              })}
+            />
+            <Stack.Screen
+              name="oderTicket"
+              component={OrderList}
+              options={(props) => ({
+                headerShown: true,
+                header: () => <Group4 />,
+              })}
+            />
+            <Stack.Screen
+              name="SearchTwoWay"
+              component={SearchTwoWay}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SearchResultsBody"
+              component={SearchResultsBody}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SplashScreen"
+              component={SplashScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Instructions"
+              component={Instructions}
+              options={(props) => ({
+                headerShown: true,
+                header: () => <Header3 />,
+              })}
+            />
 
-              <Stack.Screen
-                name="linkaccount"
-                component={LinkAccount}
-                options={{ headerShown: false }}
-              />
+            <Stack.Screen
+              name="linkaccount"
+              component={LinkAccount}
+              options={{ headerShown: false }}
+            />
 
-              <Stack.Screen name="deposit">
-                {() => (
-                  <MonoProvider {...{ ...payConfig }}>
-                    <Deposit />
-                  </MonoProvider>
-                )}
-              </Stack.Screen>
-            </Stack.Navigator>
-          ) : (
-            <SplashScreen />
-          )}
-        </NavigationContainer>
-      </MonoProvider>
-    </StoreProvider>
+            <Stack.Screen name="deposit">
+              {() => (
+                <MonoProvider {...{ ...payConfig }}>
+                  <Deposit onDeposit={handleDeposit} />
+                </MonoProvider>
+              )}
+            </Stack.Screen>
+          </Stack.Navigator>
+        ) : (
+          <SplashScreen />
+        )}
+      </NavigationContainer>
+    </MonoProvider>
   );
 };
 export default withAuthenticator(App);
