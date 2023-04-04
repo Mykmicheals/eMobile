@@ -13,9 +13,11 @@ import { Picker } from "@react-native-picker/picker";
 import { TextInput } from "react-native-paper";
 import { useMonoConnect } from "@mono.co/connect-react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useStoreState } from "easy-peasy";
-const Deposit = () => {
-  const todos = useStoreState((state) => state.accountNumber);
+
+// import { useStoreState } from "easy-peasy";
+
+const Deposit = ({ onDeposit }) => {
+  const navigation = useNavigation();
 
   const currencyOptions = [
     { label: "🇳🇬    Nigerian NGN", value: "NGN" },
@@ -24,37 +26,34 @@ const Deposit = () => {
   const [pin, setPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
   const [sendValue, setSendValue] = useState("NGN");
-  const [countries, setCountries] = useState([]);
+  const [depositAmount, setDepositAmount] = useState(0);
 
-  const [user, setUser] = useState(null);
+  // const getId = async () => {
+  //   const value = await AsyncStorage.getItem("accountId");
+  //   console.log(value);
+  // };
 
-  console.log(todos);
-
-  useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
-      .then((response) => response.json())
-      .then((data) => {
-        const countryList = data.map((country) => ({
-          name: country.name.common,
-          code: country.cca2,
-          flag: `https://restcountries.com/data/${country.cca2.toLowerCase()}.svg`,
-        }));
-        setCountries(countryList.sort((a, b) => a.name.localeCompare(b.name)));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
-  const [amount, setAmount] = useState();
-
-  const navigation = useNavigation();
+  // useEffect(() => {
+  //   getId();
+  // }, []);
 
   const handleBackPress = () => {
     navigation.goBack();
   };
 
   const { init } = useMonoConnect();
+
+  const handleTextChange = (text) => {
+    setDepositAmount(text);
+  };
+
+  const handlePayment = () => {
+    onDeposit(depositAmount);
+
+    init();
+
+    // console.log(`deposit.js ${depositAmount}`);
+  };
 
   return (
     <View style={styles.explore}>
@@ -119,10 +118,10 @@ const Deposit = () => {
           >
             <View style={{ marginTop: 20 }}></View>
             <TextInput
-              label="Enter Deposit AMount"
+              label="Enter Deposit Amount"
               keyboardType="decimal-pad"
               passwordRules={true}
-              onChange={setConfirmPin}
+              onChangeText={handleTextChange}
               style={{ backgroundColor: "white" }}
             />
 
@@ -132,7 +131,7 @@ const Deposit = () => {
               mode="contained"
               style={styles.TabButton}
               labelStyle={{ color: "white", fontSize: 14 }}
-              onPress={() => init()}
+              onPress={handlePayment}
             >
               <Text>Submit</Text>
             </TouchableOpacity>
