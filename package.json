@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@aws-amplify/cli": "^11.0.0",
+    "@expo/webpack-config": "^0.17.2",
     "@mono.co/connect-react-native": "^0.2.0",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-community/netinfo": "^9.3.7",
@@ -33,6 +34,7 @@
     "expo-linear-gradient": "~12.0.1",
     "expo-status-bar": "~1.4.2",
     "react": "18.1.0",
+    "react-dom": "18.1.0",
     "react-native": "0.70.5",
     "react-native-gesture-handler": "^2.4.2",
     "react-native-paper": "^4.12.5",
@@ -42,6 +44,7 @@
     "react-native-screens": "^3.14.1",
     "react-native-select-dropdown": "^3.2.1",
     "react-native-vector-icons": "^9.2.0",
+    "react-native-web": "~0.18.9",
     "react-native-webview": "^11.26.1"
   },
   "devDependencies": {

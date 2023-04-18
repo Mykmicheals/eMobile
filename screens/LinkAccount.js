@@ -13,10 +13,11 @@ import { Auth } from "aws-amplify";
 import { TextInput, Button } from "react-native-paper";
 import { useMonoConnect } from "@mono.co/connect-react-native";
 import { DataStore } from "aws-amplify";
-import { UserData } from "../src/models";
+import { UserAccount, UserData } from "../src/models";
 import { useNavigation } from "@react-navigation/native";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { walletUrl } from "../App";
 
 const LinkAccount = () => {
   const navigation = useNavigation();
@@ -24,6 +25,7 @@ const LinkAccount = () => {
     { label: "🇳🇬    Nigerian NGN", value: "NGN" },
     { label: "🇺🇸    Dollar USD", value: "USD" },
   ];
+  
   const [pin, setPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
   const [sendValue, setSendValue] = useState("NGN");
@@ -71,46 +73,41 @@ const LinkAccount = () => {
       });
   }, []);
 
-  // console.log(user)
-
   const createWallet = () => {
     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+    myHeaders.append("Content-Type", "application/json");
 
-    var body = new URLSearchParams();
-    body.append("userId", user.email);
-    body.append("pin", pin);
+    var raw = JSON.stringify({
+      userId: user.email,
+      pinCode: pin,
+      email: user.email,
+      firstName: user.given_name,
+      lastName: user.family_name,
+    });
 
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: body.toString(),
+      body: raw,
       redirect: "follow",
     };
 
-    fetch("http://192.168.100.37:5000/v1/wallet", requestOptions)
+    fetch(`${walletUrl}/v1/wallet`, requestOptions)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
   };
 
   const handleSubmit = async () => {
-    // createWallet();
-    // if (selectedCountry === "" || sendValue === "") {
-    //   alert("Pls selcect all fields");
-    // } else {
-    //   init();
-    // }
+    if (pin.length > 3 && pin === confirmPin) {
+      createWallet();
+      console.log(`pin is ${pin} confirm pin is ${confirmPin}`);
 
-    await DataStore.save(
-      new UserData({
-        Username: "myk",
-        Email: user.email,
-        // cognitoId: user.sub,
-        CognitoId: "nhdbxbdmvcs",
-        AccountBallance: 0.0,
-      })
-    );
+      init();
+    } else {
+      alert("pin and confirm pin do not match");
+      console.log(`pin is ${pin} confirm pin is ${confirmPin}`);
+    }
   };
 
   const handleBackPress = () => {
@@ -207,7 +204,7 @@ const LinkAccount = () => {
             contentContainerStyle={styles.trendingCardsViewContent}
           >
             <TextInput
-              label="Enter Your pin"
+              label="Set Your new pin"
               keyboardType="decimal-pad"
               style={{ backgroundColor: "white" }}
               onChangeText={setPin}
@@ -218,7 +215,7 @@ const LinkAccount = () => {
               label="Confirm Your pin"
               keyboardType="decimal-pad"
               passwordRules={true}
-              onChange={setConfirmPin}
+              onChangeText={setConfirmPin}
               style={{ backgroundColor: "white" }}
               secureTextEntry={true}
             />
@@ -230,8 +227,9 @@ const LinkAccount = () => {
               style={styles.TabButton}
               labelStyle={{ color: "white", fontSize: 14 }}
               onPress={() => {
-                handleSubmit;
+                handleSubmit();
               }}
+              // onPress={createWallet}
             >
               Submit
             </Button>

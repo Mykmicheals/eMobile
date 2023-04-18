@@ -45,8 +45,10 @@ import LinkAccount from "./screens/LinkAccount";
 import { MonoProvider } from "@mono.co/connect-react-native";
 import Deposit from "./screens/Deposit";
 import { DataStore } from "aws-amplify";
-import { UserData, OrderTicket, UserAccount } from "./src/models";
+import { UserAccount } from "./src/models";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export const walletUrl = "http://192.168.100.56:8000";
 
 Amplify.configure(config);
 const Drawer = createDrawerNavigator();
@@ -168,6 +170,11 @@ function BottomTabsRoot({ navigation }) {
         component={OrderList}
         options={{ headerShown: false }}
       />
+      <Tab.Screen
+        name="OfferTicket"
+        component={Swap}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 }
@@ -176,7 +183,6 @@ const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
   const [depositAmount, setDepositAmount] = useState();
   const [accountId, setAccountId] = useState(0);
-  const [accountIdFromStorage, setAccountIdFromStorage] = useState(null);
 
   const handleDeposit = (amount) => {
     setDepositAmount(amount);
@@ -223,8 +229,6 @@ const App = () => {
     onClose: () => alert("Widget closed"),
     onSuccess: async (data) => {
       const code = data.getAuthCode();
-      // console.log("Access code", code);
-
       const options = {
         method: "POST",
         headers: {
@@ -240,14 +244,18 @@ const App = () => {
           options
         );
         const data = await response.json();
+        console.log(data);
         const models = await DataStore.save(
           new UserAccount({
             UserID: user.sub,
             AccountNumberID: data.id,
+            Type: "Mono-Connect",
           })
         );
         await AsyncStorage.setItem("accountId", data.id);
-         setAccountId(data.id);
+        setAccountId(data.id);
+
+        await AsyncStorage.setItem("accountLinked", "true");
 
         // const userAccounts = await DataStore.query(UserAccount, (u) =>
         //   u.UserID.eq("4e710e9c-a95d-4d25-ac0a-d5988eb966fa")
@@ -257,6 +265,7 @@ const App = () => {
       } catch (err) {
         console.error(err);
       }
+       navigate.navigate("/");
     },
 
     reference: "random_string", // optional
@@ -267,7 +276,7 @@ const App = () => {
 
   const getId = async () => {
     const value = await AsyncStorage.getItem("accountId");
-    setAccountId(value)
+    setAccountId(value);
   };
 
   useEffect(() => {
@@ -280,11 +289,36 @@ const App = () => {
     scope: "payments",
     publicKey: "test_pk_txILHvD85YFmYmDWIynt",
     onClose: () => alert("Widget closed"),
-    onSuccess: () => alert("Payment Sucess"),
+    onSuccess: () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+      var urlencoded = new URLSearchParams();
+      urlencoded.append("userId", "mykmicheals@gmail.com");
+      urlencoded.append("amount", "2000");
+      urlencoded.append("pinCode", "123456");
+      urlencoded.append("currency", "ENGN");
+      urlencoded.append(
+        "issuer",
+        "GC6NGB45CEQD76LLBSUBPSEURF45NNG4QU6EK3HYWQ3PFGVFS6CQEF2H"
+      );
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: urlencoded,
+        redirect: "follow",
+      };
+
+      // fetch("http://localhost:8000/v1/wallet/deposit", requestOptions)
+      fetch(`${walletUrl}/v1/wallet/deposit`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+    },
     data: {
-      amount: 10000,
+      amount: 100 * 100,
       type: "onetime-debit",
-     // account: accountIdFromStorage || accountId,
       account: accountId,
     },
   };

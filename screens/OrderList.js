@@ -8,31 +8,26 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Avatar } from 'react-native-paper';
-import { DataStore } from 'aws-amplify'
-import {
-  OrderTicket,
-} from '../src/models'
-import getTime from '../src/helpers/time'
-const Naira = require('../assets/dollar.png');
-const Dollar = require('../assets/naira.png');
+import { Avatar } from "react-native-paper";
+import { DataStore } from "aws-amplify";
+import { OrderTicket } from "../src/models";
+import getTime from "../src/helpers/time";
+const Naira = require("../assets/dollar.png");
+const Dollar = require("../assets/naira.png");
 
 const OrderBook = () => {
-
   async function onQuery() {
-    const data = await DataStore.query(OrderTicket)
-    setOrderbook(data)
-    console.log("OrderBook Data", data)
+    const data = await DataStore.query(OrderTicket);
+    setOrderbook(data);
+    console.log("OrderBook Data", data);
   }
-  const [orderbook, setOrderbook] = useState([])
+  const [orderbook, setOrderbook] = useState([]);
 
   useEffect(() => {
-    onQuery()
-  }, [])
-
+    onQuery();
+  }, []);
 
   return (
     <View style={styles.explore}>
@@ -43,15 +38,20 @@ const OrderBook = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.exploreMainViewContent}
       >
-
         <View style={{ marginTop: 20 }}>
-          <Text style={[styles.trendingDestinations, { color: 'black', fontSize: 20 }]}>
+          <Text
+            style={[
+              styles.trendingDestinations,
+              { color: "black", fontSize: 20 },
+            ]}
+          >
             Order Book
           </Text>
-          <Text style={[styles.seeAll, { color: 'black' }]}>All swap listings with different rate</Text>
+          <Text style={[styles.seeAll, { color: "black" }]}>
+            All swap listings with different rate
+          </Text>
         </View>
         <View style={[styles.exploreContent, styles.mt20]}>
-
           <View style={[styles.trendingDestinations1, styles.mt30]}>
             <ScrollView
               style={[styles.trendingCardsView, styles.mt14]}
@@ -61,16 +61,23 @@ const OrderBook = () => {
             >
               {orderbook.map((item) => {
                 return (
-                  <CoinComponent action='USD/NGN' avatar={item.currencyReceived !== "USD" ? Naira : Dollar} user={"USERNAME"} amount={item.Amount} currencySent={item.currencySent} currencyReceived={item.CurrencyReceive}
-                    time={getTime(item.updatedAt)} display={() => console.log(JSON.stringify(item))} />
-                )
+                  <CoinComponent
+                    action="USD/NGN"
+                    avatar={item.currencyReceived !== "USD" ? Naira : Dollar}
+                    user={"USERNAME"}
+                    amount={item.Amount}
+                    currencySent={item.currencySent}
+                    currencyReceived={item.CurrencyReceive}
+                    time={getTime(item.updatedAt)}
+                    display={() => console.log(JSON.stringify(item))}
+                  />
+                );
               })}
-
             </ScrollView>
           </View>
         </View>
-      </ScrollView >
-    </View >
+      </ScrollView>
+    </View>
   );
 };
 
@@ -79,23 +86,47 @@ const CoinComponent = ({ avatar, display, amount, time }) => {
     <View style={styles.COIN_CARD}>
       <View style={styles.FLEX}>
         {/* <Avatar.Image size={44} source={avatar} /> */}
-        <Image
-          style={styles.groupIcon}
-          resizeMode="cover"
-          source={avatar}
-        />
+        <Image style={styles.groupIcon} resizeMode="cover" source={avatar} />
         <View style={[styles.COIN_TEXT_CONTAINER, { marginLeft: 20 }]}>
-          <Text style={[styles.COINT_ITEM, { textTransform: "uppercase" }]}>Rate: {amount}</Text>
-          <Text style={[styles.COINT_ITEM, { textTransform: "uppercase" }]}>USD/NGN</Text>
+          <Text style={[styles.COINT_ITEM, { textTransform: "uppercase" }]}>
+            Rate: {amount}
+          </Text>
+          <Text style={[styles.COINT_ITEM, { textTransform: "uppercase" }]}>
+            USD/NGN
+          </Text>
           <Text style={styles.SUB_TEXT}>{time}</Text>
         </View>
       </View>
       <View style={[styles.COIN_TEXT_CONTAINER, { marginTop: 0 }]}>
-        <TouchableOpacity style={styles.TabButton} onPress={() => console.log(display)}>
-          <Text style={{ color: "white", lineHeight: 12, fontSize: 12, paddingHorizontal: 1 }}>Swap</Text>
+        <TouchableOpacity
+          style={styles.TabButton}
+          onPress={() => console.log(display)}
+        >
+          <Text
+            style={{
+              color: "white",
+              lineHeight: 12,
+              fontSize: 12,
+              paddingHorizontal: 1,
+            }}
+          >
+            Swap
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.TabButton2} onPress={() => console.log(display)}>
-          <Text style={{ color: "white", lineHeight: 12, fontSize: 12, paddingHorizontal: 1 }}>Negotiate</Text>
+        <TouchableOpacity
+          style={styles.TabButton2}
+          onPress={() => console.log(display)}
+        >
+          <Text
+            style={{
+              color: "white",
+              lineHeight: 12,
+              fontSize: 12,
+              paddingHorizontal: 1,
+            }}
+          >
+            Negotiate
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -105,7 +136,7 @@ const CoinComponent = ({ avatar, display, amount, time }) => {
 const styles = StyleSheet.create({
   groupIcon: {
     height: 60,
-    width: 60
+    width: 60,
   },
   header: {
     backgroundColor: "#fff",
@@ -494,7 +525,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     color: "#1262ae",
     textAlign: "left",
-    marginTop: 2
+    marginTop: 2,
   },
   trendingHeader: {
     alignSelf: "stretch",
@@ -955,7 +986,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignContent: "center",
     shadowColor: "gray",
-    marginHorizontal: "auto"
+    marginHorizontal: "auto",
   },
 
   FLEX: {
@@ -964,7 +995,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: "auto",
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
   COIN_TEXT_CONTAINER: {
     display: "flex",
@@ -980,16 +1011,39 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "gray",
     fontWeight: "normal",
-  }
-  ,
+  },
   COIN_TEXT_CONTAINER: {
     display: "flex",
-  }
-  , TabButton:
-    { width: 70, height: 28, display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#0063F5", padding: 0, borderRadius: 4, color: "white", paddingHorizontal: 2, elevation: 2, marginBottom: 4, narginTop: 0 }
-  , TabButton2:
-    { width: 70, height: 28, display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "grey", padding: 0, borderRadius: 4, color: "white", paddingHorizontal: 2, elevation: 2, marginVertical: 0 }
+  },
+  TabButton: {
+    width: 70,
+    height: 28,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0063F5",
+    padding: 0,
+    borderRadius: 4,
+    color: "white",
+    paddingHorizontal: 2,
+    elevation: 2,
+    marginBottom: 4,
+    narginTop: 0,
+  },
+  TabButton2: {
+    width: 70,
+    height: 28,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "grey",
+    padding: 0,
+    borderRadius: 4,
+    color: "white",
+    paddingHorizontal: 2,
+    elevation: 2,
+    marginVertical: 0,
+  },
 });
-
 
 export default OrderBook;

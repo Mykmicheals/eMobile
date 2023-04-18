@@ -49,7 +49,7 @@ const ProfileIcon = () => {
             <View style={styles.profileDetails}>
               <View style={styles.nameParticulars}>
                 <View style={styles.frameView1}>
-                  <Text style={styles.macyJohnson}>Ebenezer Ayoola
+                  <Text style={styles.macyJohnson}>Taylor
                   </Text>
                   <Text style={[styles.baguioPhilippines, styles.mt2]}>
                     my email@gmail.com

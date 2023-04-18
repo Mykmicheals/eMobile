@@ -84,10 +84,7 @@ const Explore = () => {
               </View>
             </View>
             <View>
-              <Text style={styles.text}>
-                {" "}
-                {currency ? "$1299" : "N598189.50"}{" "}
-              </Text>
+              <Text style={styles.text}> {currency ? "$129" : "N2,500"} </Text>
             </View>
             <Button
               mode="outlined"
@@ -102,9 +99,9 @@ const Explore = () => {
                 },
               ]}
               labelStyle={{ color: "#0063F5", fontSize: 10 }}
-              onPress={() => console.log("Pressed")}
+              onPress={() => navigation.navigate("OfferTicket")}
             >
-              Create Swap Order
+              Create Offer
             </Button>
           </View>
           {/* <Image

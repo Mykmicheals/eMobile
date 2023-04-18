@@ -33,7 +33,7 @@ const DrawerMenu = ({ state, navigation }) => {
             </View>
             <View style={[styles.frameView1, styles.ml12]}>
               <Text style={styles.hello}>Hello</Text>
-              <Text style={styles.macyJohnson}>Ebenezer, John</Text>
+              <Text style={styles.macyJohnson}>Taylor</Text>
             </View>
           </View>
           <View style={[styles.lineView, styles.mt20]} />

@@ -246,9 +246,7 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "orderticketID"
-                        ]
+                        "associatedWith": "orderticketID"
                     }
                 },
                 "createdAt": {

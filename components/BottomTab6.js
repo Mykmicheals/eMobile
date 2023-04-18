@@ -16,7 +16,7 @@ const BottomTab6 = ({ style }) => {
         resizeMode="cover"
         source={require("../assets/swap-active.png")}
       />
-      <Text style={[styles.search, styles.mt14]}>Swap</Text>
+      <Text style={[styles.search, styles.mt14]}>Offers</Text>
     </View>
   );
 };

@@ -52,7 +52,6 @@ const Deposit = ({ onDeposit }) => {
 
     init();
 
-    // console.log(`deposit.js ${depositAmount}`);
   };
 
   return (
