@@ -7,77 +7,68 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Picker } from '@react-native-picker/picker';
-import { DataStore, Auth } from 'aws-amplify'
-import {
-  SwapTicket,
-} from '../src/models'
+import { Picker } from "@react-native-picker/picker";
+import { DataStore, Auth } from "aws-amplify";
+import { SwapTicket } from "../src/models";
 // import getTime from '../src/helpers/time'
 // const Naira = require('../assets/dollar.png');
 // const Dollar = require('../assets/nigeria_flag.png');
-import { TextInput, Button, Checkbox } from 'react-native-paper';
+import { TextInput, Button, Checkbox } from "react-native-paper";
 
 const OrderBook = () => {
-  const currencyOptions = [{ label: "🇳🇬    Nigerian NGN", value: 'NGN' }, { label: "🇺🇸    Dollar USD", value: "USD" }]
+  const currencyOptions = [
+    { label: "🇳🇬    Nigerian NGN", value: "NGN" },
+    { label: "🇺🇸    Dollar USD", value: "USD" },
+  ];
   const [checked, setChecked] = React.useState(false);
   const [sendValue, setSendValue] = useState("NGN");
   const [receiveValue, setReceiveValue] = useState("USD");
 
-
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   useEffect(() => {
     function loadUser() {
-      return Auth.currentAuthenticatedUser({ bypassCache: true })
+      return Auth.currentAuthenticatedUser({ bypassCache: true });
     }
 
     async function onload() {
       try {
-        const user = await loadUser()
-        setUser(user.attributes)
+        const user = await loadUser();
+        setUser(user.attributes);
       } catch (e) {
-        alert(e)
+        alert(e);
       }
     }
 
-    onload()
-
-  }, [])
+    onload();
+  }, []);
 
   async function SaveQuery(data) {
-
-
-    await Datastore.save(
-      new SwapTicket(
-        data
-      )
-    )
+    await DataStore.save(new SwapTicket(data));
   }
-
 
   useEffect(() => {
     // onQuery()
-  }, [])
-  const navigation = useNavigation()
+  }, []);
+  const navigation = useNavigation();
   const goToSwap = () => {
-    navigation.navigate('oderTicket')
-  }
+    navigation.navigate("oderTicket");
+  };
 
   const handleSubmit = () => {
     const data = {
-      'UserID': null,
-      'CurrencyPair': '',
-      'NegotiateRate': checked,
-      "Rate": 900,
-      "AmountToSend": sendValue,
-      "orderticketID": null
-    }
-    console.log(data);
-    SaveQuery(data)
-    goToSwap()
-  }
+      UserID: 'b3ueakmed-dnwj',
+      CurrencyPair: "",
+      NegotiateRate: checked,
+      Rate: 900,
+      AmountToSend: 500,
+      orderticketID: '300dhbdhc',
+    };
+    // console.log(data);
+    SaveQuery(data);
+     goToSwap()
+  };
 
   return (
     <View style={styles.explore}>
@@ -88,22 +79,22 @@ const OrderBook = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.exploreMainViewContent}
       >
-
         <View style={{ marginTop: 20 }}>
-          <Text style={[styles.trendingDestinations, { color: 'black', fontSize: 20 }]}>
+          <Text
+            style={[
+              styles.trendingDestinations,
+              { color: "black", fontSize: 20 },
+            ]}
+          >
             Create a Swap Ticket
           </Text>
           {/* <Text style={[styles.seeAll, { color: 'black' }]}>All swap listings with different rate</Text> */}
         </View>
         <View style={[styles.exploreContent, styles.mt20]}>
-
           <View style={styles.trendingHeader}>
-            <Text style={styles.trendingDestinations}>
-              Give Away
-            </Text>
-            <TouchableOpacity onPress={() => { }}>
+            <Text style={styles.trendingDestinations}>Give Away</Text>
+            <TouchableOpacity onPress={() => {}}>
               <Text style={styles.seeAll}></Text>
-
             </TouchableOpacity>
           </View>
           <View style={{ borderRadius: 12 }}>
@@ -117,27 +108,22 @@ const OrderBook = () => {
               >
                 {currencyOptions.map((item, i) => {
                   return (
-
-                    <Picker.Item key={i} label={item.label} value={item.value} />
-                  )
+                    <Picker.Item
+                      key={i}
+                      label={item.label}
+                      value={item.value}
+                    />
+                  );
                 })}
-
               </Picker>
             </View>
-
           </View>
-
-
         </View>
         <View style={[styles.exploreContent, styles.mt20]}>
-
           <View style={styles.trendingHeader}>
-            <Text style={styles.trendingDestinations}>
-              You Receive
-            </Text>
-            <TouchableOpacity onPress={() => { }}>
+            <Text style={styles.trendingDestinations}>You Receive</Text>
+            <TouchableOpacity onPress={() => {}}>
               <Text style={styles.seeAll}></Text>
-
             </TouchableOpacity>
           </View>
           <View style={{ borderRadius: 12 }}>
@@ -151,17 +137,16 @@ const OrderBook = () => {
               >
                 {currencyOptions.map((item, i) => {
                   return (
-
-                    <Picker.Item key={i} label={item.label} value={item.value} />
-                  )
+                    <Picker.Item
+                      key={i}
+                      label={item.label}
+                      value={item.value}
+                    />
+                  );
                 })}
-
               </Picker>
             </View>
-
           </View>
-
-
         </View>
         <View style={[styles.trendingDestinations1, styles.mt30]}>
           <ScrollView
@@ -174,56 +159,66 @@ const OrderBook = () => {
               label="Your Rate"
               keyboardType="decimal-pad"
               style={{ backgroundColor: "white" }}
-            // right={<TextInput.Icon icon="eye" />}
+              // right={<TextInput.Icon icon="eye" />}
             />
             <View style={{ marginTop: 20 }}></View>
             <TextInput
               label="Quantity"
               keyboardType="decimal-pad"
               style={{ backgroundColor: "white" }}
-            // right={<TextInput.Icon icon="eye" />}
+              // right={<TextInput.Icon icon="eye" />}
             />
 
-            <View style={{ marginTop: 20, display: 'flex', flexDirection: "row" }}>
-
+            <View
+              style={{ marginTop: 20, display: "flex", flexDirection: "row" }}
+            >
               <Checkbox
-                status={checked ? 'checked' : 'unchecked'}
+                status={checked ? "checked" : "unchecked"}
                 onPress={() => {
                   setChecked(!checked);
                 }}
               />
-              <Text style={[styles.seeAll, { color: 'black', marginTop: 1 }]}>Allow rate negotiation</Text>
+              <Text style={[styles.seeAll, { color: "black", marginTop: 1 }]}>
+                Allow rate negotiation
+              </Text>
             </View>
-
 
             <View style={{ marginTop: 40 }}></View>
 
-            <Button mode="contained" style={styles.TabButton} labelStyle={{ color: "white", fontSize: 14 }} onPress={handleSubmit}>
+            <Button
+              mode="contained"
+              style={styles.TabButton}
+              labelStyle={{ color: "white", fontSize: 14 }}
+              onPress={handleSubmit}
+            >
               Submit
             </Button>
           </ScrollView>
         </View>
-      </ScrollView >
-    </View >
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   selectContainer: {
     flexDirection: "row",
-    display: 'flex',
+    display: "flex",
     paddingTop: 4,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: 'blue',
+    borderColor: "blue",
     width: "100%",
     justifyContent: "space-between",
-    alignItems: "center"
-
+    alignItems: "center",
   },
-  TabButton:
-  {
-    width: "100%", height: 50, display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#0063F5",
+  TabButton: {
+    width: "100%",
+    height: 50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0063F5",
     marginTop: 20,
   },
   groupIcon: {
@@ -617,7 +612,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     color: "#1262ae",
     textAlign: "left",
-    marginTop: 2
+    marginTop: 2,
   },
   trendingHeader: {
     alignSelf: "stretch",
@@ -1078,7 +1073,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignContent: "center",
     shadowColor: "gray",
-    marginHorizontal: "auto"
+    marginHorizontal: "auto",
   },
 
   FLEX: {
@@ -1087,7 +1082,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: "auto",
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
   COIN_TEXT_CONTAINER: {
     display: "flex",
@@ -1103,13 +1098,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "gray",
     fontWeight: "normal",
-  }
-  ,
+  },
   COIN_TEXT_CONTAINER: {
     display: "flex",
-  }
-
+  },
 });
-
 
 export default OrderBook;
